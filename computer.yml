@@ -1,0 +1,63 @@
+---
+- name: Auto-Builder
+  hosts: computer
+  tasks:
+   - name: Apt update && upgrade
+     include_role:
+       name: apt-update
+
+    ## Install packages
+   - name: install basic packages
+     apt:
+       name: "{{ item }}"
+       state: latest
+     with_items:
+       - git
+       - aircrack-ng
+       - ansible
+       - cmake
+       - docker
+       - filezilla
+       - gimp
+       - gparted
+       - nmap
+       - openjdk-{{ java_version }}-jre
+       - python3-pip
+       - python3-setuptools
+       - python-pip
+       - python-setuptools
+       - steam
+       - system-config-kickstart
+       - virtualbox
+       - vlc
+       - yakuake
+
+   # create software directory if it doesn't exist
+   - name: Create software directory
+     file:
+       path: ~/{{ item }}/
+       state: directory
+       mode: 0755
+     with_items:
+       - software
+
+   # Check for existence of pycharm
+   - stat:
+       path: ~/software/pycharm-community-{{ pycharm_version }}/
+     register: pycharm
+
+   # install Pycharm
+   - name: Install PyCharm
+     when: pycharm.stat.exists == False
+     include_role:
+       name: install_pycharm
+
+   # install Nvidia drivers
+   - name: Install Nvidia drivers
+     include_role:
+       name: nvidia-drivers
+
+   # install Corsair K70 software
+   - name: Install Corsair K70 software
+     include_role:
+       name: corsair-k70

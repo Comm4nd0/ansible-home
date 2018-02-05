@@ -1,0 +1,24 @@
+---
+# install graphics
+- name: Blacklist Nouveau drivers
+  copy:
+    src: blacklist-nouveau.conf
+    dest: /etc/modprobe.d/blacklist-nouveau.conf
+    mode: 0755
+
+- name: Install Nvidia driver
+  apt:
+    name: nvidia-384
+    state: latest
+
+- name: Update nvidia-drm modset
+  copy:
+    src: nvidia-drm-nomodeset.conf
+    dest: /etc/modprobe.d/nvidia-drm-nomodeset.conf
+    mode: 0755
+
+- name: Disable Wayland in GDM
+  replace:
+    path: /etc/gdm3/custom.conf
+    regexp: '^# WaylandEnable=false'
+    replace: 'WaylandEnable=false'

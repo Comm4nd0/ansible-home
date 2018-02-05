@@ -1,0 +1,8 @@
+[computer]
+192.168.0.20   ansible_connection=ssh ansible_ssh_user=****** ansible_ssh_pass=****** ansible_sudo_pass=******
+
+[luca-laptop]
+192.168.0.137   ansible_connection=ssh ansible_ssh_user=****** ansible_ssh_pass=****** ansible_sudo_pass=******
+
+[work-laptop]
+192.168.0.81   ansible_connection=ssh ansible_ssh_user=****** ansible_ssh_pass=****** ansible_sudo_pass=******

@@ -1,0 +1,34 @@
+---
+- name: Auto-Builder
+  hosts: luca-laptop
+  become: true
+  become_method: sudo
+  tasks:
+   - name: Apt update && upgrade
+     include_role:
+       name: apt-update
+
+    ## Install packages
+   - name: install basic packages
+     apt:
+       name: "{{ item }}"
+       state: latest
+     become: true
+     become_method: sudo
+     with_items:
+       - git
+       - openjdk-{{ java_version }}-jre
+       - python3-pip
+       - python3-setuptools
+       - python-pip
+       - python-setuptools
+       - vlc
+
+   - name: Hide GRUB menu
+     replace:
+      path: /etc/default/grub
+      regexp: '^GRUB_TIMEOUT=10'
+      replace: 'GRUB_TIMEOUT=1'
+
+   - name: update GRUB changes
+     shell: update-grub

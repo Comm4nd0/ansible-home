@@ -1,0 +1,30 @@
+---
+- git:
+    repo: 'https://github.com/ccMSC/ckb.git'
+    dest: ~/software/k70
+    clone: yes
+
+## Install packages
+- name: install basic packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+  become: true
+  with_items:
+    - build-essential
+    - libudev-dev
+    - qt5-default
+    - zlib1g-dev
+    - libappindicator-dev
+
+#   - name: Change pycharm dir permissions
+#     file:
+#       path: "~/software/k70/"
+#       state: directory
+#       recurse: yes
+#       mode: 0755
+
+- name: install k70 software
+  shell: ~/software/k70/quickinstall
+  agrs:
+    executable: /bin/bash/

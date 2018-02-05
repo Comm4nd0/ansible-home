@@ -1,0 +1,26 @@
+---
+## install pycharm
+- name: Download Pycharm
+  get_url:
+    url: https://download.jetbrains.com/python/pycharm-community-{{ pycharm_version }}.tar.gz
+    dest: ~/software/
+    mode: 0755
+
+- name: Extract pycharm-community-{{ pycharm_version }}.tar.gz
+  unarchive:
+    src: "~/software/pycharm-community-{{ pycharm_version }}.tar.gz"
+    dest: "~/software/"
+    mode: 0644
+    copy: no
+
+- name: Change pycharm dir permissions
+  file:
+    path: "~/software/pycharm-community-{{ pycharm_version }}/"
+    state: directory
+    recurse: yes
+    mode: 0755
+
+- name: Clean up Pycharm
+  file:
+    state: absent
+    path: "~/software/pycharm-community-{{ pycharm_version }}.tar.gz"

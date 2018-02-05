@@ -1,0 +1,62 @@
+---
+- name: Auto-Builder
+  hosts: work-laptop
+  become: true
+  become_method: sudo
+  tasks:
+   - name: dnf update
+     include_role:
+       name: dnf-update
+
+   ## Install packages
+   - name: install basic packages
+     dnf:
+       name: "{{ item }}"
+       state: latest
+     with_items:
+       - git
+       - aircrack-ng
+       - ansible
+       - cmake
+       - docker
+       - filezilla
+       - gimp
+       - gparted
+       - nmap
+       - java-{{ java_version }}-openjdk
+       - libselinux-python
+       - python3-configargparse
+       - python3-docker
+       - python3-pip
+       - python3-pyaudio
+       - python3-selenium
+       - python3-setuptools
+       - python-dbus
+       - python-gobject
+       - python-pip
+       - python-pyaudio
+       - python-qt4
+       - python-reportlab
+       - python-setuptools
+       - python-urllib3
+       - yakuake
+
+   # create software directory if it doesn't exist
+   - name: Create software directory
+     file:
+       path: ~/{{ item }}/
+       state: directory
+       mode: 0755
+     with_items:
+       - software
+
+   # Check for existence of pycharm
+   - stat:
+       path: ~/software/pycharm-community-{{ pycharm_version }}/
+     register: pycharm
+
+   # install Pycharm
+   - name: Install PyCharm
+     when: pycharm.stat.exists == False
+     include_role:
+       name: install_pycharm
